@@ -1,0 +1,16 @@
+1. Clone tensorflow model git depot
+2. Download bosh data set
+3. Create TF record files for train and test
+4. Create own labeled images with labelImg
+5. Train model
+6. Freeze model and test in the environment
+
+protoc object_detection/protos/*.proto --python_out=.
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim:`pwd`/object_detection/utils
+
+//Call in the folder with labeled images
+xml2csv.py
+python3 generate_tf_record.py --images_path=. --csv_input=train.csv  --output_path=train.record
+
+//Create tf record from bosh data set, call it in the directory with data
+python tf_record.py --output_path training.record
