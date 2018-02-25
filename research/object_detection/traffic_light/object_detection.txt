@@ -5,8 +5,19 @@
 5. Train model
 6. Freeze model and test in the environment
 
+scp -i ~/udacity/sdc/nvirginia.pem ubuntu@52.55.128.140:~/models/research/object_detection/traffic_light/models ~/Download/
+
+//copy pretrained model to amazon
+scp -r -i ~/udacity/sdc/nvirginia.pem ~/Downloads/faster_rcnn_resnet101_coco_2018_01_28  ubuntu@52.55.128.140:~/models/research/object_detection/traffic_light/models
+
 protoc object_detection/protos/*.proto --python_out=.
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim:`pwd`/object_detection/utils
+python train.py --logtostderr --train_dir=./models/train --pipeline_config_path=rfcn_resnet101_coco.config
+python train.py --logtostderr --train_dir=./models/train --pipeline_config_path=faster_rcnn_traffic_bosch.config
+
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path ./rfcn_resnet101_coco.config --trained_checkpoint_prefix ./models/train/model.ckpt-5000 --output_directory ./fine_tuned_model
+
+
 
 //Call in the folder with labeled images
 xml2csv.py
